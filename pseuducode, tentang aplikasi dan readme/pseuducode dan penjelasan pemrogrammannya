@@ -1,0 +1,178 @@
+program text editor dengan tkinter
+deklarasi (kamus):
+mengambil class tkinter, mengimport massgebox dari tkinter, mengimport 'askopenfilename' dari class 'filedialog' tkinter, mengimport class file dialog dari library tkinter, mengambil class python yaitu os, dan mengimport massegebox sebagai "askokcancel"
+
+deskripsisi:
+membuat class 'SImpleEditor' dengan inheritence class ('Frame' di tkinter):
+    fungsi __init__(self, parent=None, file=None): # konstruktor class diatas
+        Frame.__init__ -> (self, parent) # menjalankan construktor class 'Frame' (parent)
+        self.frm = Frame -> (parent) # membuat frame (tempat tombol/toolbar)
+        self.frm.pack -> (fill=window) # memasukkan frame ke window
+        self.buatJudul() # menjalankan metode 'buatJudul'
+        self.parent = parent 
+        self.parent.title('Text Editor Sederhana Dengan Tkinter | Ahmad Bujai Rimi 20190801217') # mengubah judul pada tkinter
+        self.buatTombol() # menjalankan metode buatTombol
+        self.kolomTeksUtama() # menjalankan metode 'kolomTeksUtama'
+        self.settext(text=''(kosong),file=file) # memasukkan teks (kosongan)
+        self.kolomTeks.pengaturan(font=('DejaVu Sans Mono(jenis text)', 10(ukuran text))) # mengatur jenis dan ukuran teks
+        self.path = '' # menampung path
+        self.indeks -> '0.9' # inisialisasi variabel 'indeks' sebagai penentu lokasi pencarian
+        self.buatCari() # menjalankan fungsi 'buatCari'
+        self.buatMenuBar() # menjalankan fungsi 'buatMenuBar'
+    fungsi 'buatTombol':
+        Button(self.frm, text='Buka',relief='flat',  perintah=self.bukaFile).pack(posisi=kiri) # membuat tombol 'Open' yang menjalankan metode 'bukaFile' ketika di klik
+        Button(self.frm, text='Simpan',relief='flat',  perintah=self.perintahSimpan).pack(posisi=kiri) # membuat tombol 'Simpan' yang menjalankan fungsi 'perintahSimpan' ketika di klik
+        Button(self.frm, text='Salin', relief='flat', perintah=self.perintahCopy).pack(posisi=kiri) # membuat tombol 'Salin' yang menjalankan fungsi 'perintahCopy' ketika di klik
+        Button(self.frm, text='potong', relief='flat',   perintah=self.perintahCut).pack(posisi=kiri) # membuat tombol 'potong' yang menjalankan fungsi 'perintahCut' ketika di klik
+        Button(self.frm, text='tempel', relief='flat', perintah=self.perintahPaste).pack(posisi=kiri) # membuat tombol 'Tempel' yang menjalankan fungsi 'perintahPaste' ketika di klik
+        Button(self.frm, text='Undo', relief='flat',   perintah=self.perintahUndo).pack(posisi=kiri) # membuat tombol 'Undo' yang menjalankan fungsi 'perintahUndo' ketika di klik
+        Button(self.frm, text='Redo', relief='flat', perintah=self.perintahRedo).pack(posisi=kiri) # membuat tombol 'Redo' yang menjalankan fungsi 'perintahRedo' ketika di klik
+        Button(self.frm, text='Keluar', relief='flat', perintah=self.perintahKeluar).pack(posisi=kiri) # membuat tombol 'Keluar' yang menjalankan fungsi 'perintahKeluar' ketika di klik
+    fungsi 'kolomTeksUtama':
+        scroll = Scrollbar(self) # membuat scrollbar
+        kolomTeks = Text(self, relief=SUNKEN, undo=jalankan) # membuat kolom teks utama (tempat teks)
+        scroll.config(perintah=kolomTeks.yview) # menghubungkan scrollbar ke kolom teks utama
+        kolomTeks.config(yscrollperintah=scroll.set) # menghubungkan teks utama dengan scrollbar
+        scroll.pack(posisi=benar, fill=window) # memasukkan scrollbar ke window
+        kolomTeks.pack(posisi=KIRI, expand=YES, fill=BOTH)
+        self.kolomTeks = kolomTeks # menampung kolom teks utama
+        self.pack(expand=YES, fill=BOTH) # memasukkan kolom teks utama ke window
+    fungsi 'buatMenuBar':
+        self.menubar = Menu(self.parent,bd=0) # inisialisasi MenuBar
+        self.fileMenu = Menu(self.parent, tearoff=0) # membuat menu 'File'
+        self.fileMenu.tambahkan_perintah(label="Buka", perintah=self.bukaFile) # menambah sub menu 'Buka' ke dalam menu 'File'
+        self.fileMenu.tambahkan_perintah(label="Simpan", perintah=self.perintahSimpan) # menambah sub menu 'Simpan' ke dalam menu 'File'
+        self.fileMenu.tambahkan_perintah(label="Keluar", perintah=self.perintahKeluar) # menambah sub menu 'keluar' ke dalam menu ‘File’
+        self.menubar.tambahkan_cascade(label="File", menu=self.fileMenu) # memasukkan menu 'File' ke dalam menubar
+
+        self.menuEdit = Menu(self.parent, tearoff=0) # membuat menu 'Edit'
+        self.menuEdit.tambahkan_perintah(label="Undo", perintah=self.perintahUndo) # menambah sub menu 'Undo' ke dalam menu 'Edit'
+        self.menuEdit.tambahkan_perintah(label="Redo", perintah=self.perintahRedo) # menambah sub menu 'Redo' ke dalam menu 'Edit'
+        self.menuEdit.tambahkan_pemisah() # menambah garis/separator
+        self.menuEdit.tambahkan_perintah(label="salin", perintah=self.perintahCopy) # menambah sub menu 'Copy' ke dalam menu 'Edit'
+        self.menuEdit.tambahkan_perintah(label="potong", perintah=self.perintahCut) # menambah sub menu 'Cut' ke dalam menu 'Edit'
+        self.menuEdit.tambahkan_perintah(label="tempel", perintah=self.perintahPaste) # menambah sub menu 'Paste' ke dalam menu 'Edit'
+        self.menubar.tambahkan_cascade(label="edit", menu=self.menuEdit) # memasukkan menu edit ke menubar
+
+        self.menuWebGithub = Menu(self.parent, tearoff=0) # membuat menu 'Github'
+        self.menuWebGithub.tambahkan_perintah(label="MyGithub", perintah=self.pergikeGithub) # menambah sub menu 'MyGithub' ke dalam menu 'Github'
+        self.menubar.tambahkan_cascade(label="Github", menu=self.menuWebGithub) # memasukkan menu 'Github' ke menubar
+
+        self.menuAbout = Menu(self.parent, tearoff=0) # membuat menu 'About'
+        self.menuAbout.tambahkan_perintah(label="Tentang aplikasi", command=self.about) # menambah sub menu 'Tentang aplikasi' ke dalam menu 'about'
+        self.menubar.tambahkan_cascade(label="About", menu=self.menuAbout) # memasukkan menu 'About' ke menubar
+
+        self.parent.config(menu <- self.menubar) # memasukkan menubar ke window
+        self.pack() # memasukkan aplikasi ke window
+
+    fungsi 'perintahSimpan':
+        print(self.path) 
+        jika path tidak kosong:
+            semua text = self.gettext() # mendapatkan semua text
+            buka(self.path, 'w').menulis(semua text) # menyimpan file
+            messagebox.tampilkan pesan('Berhasil', 'Selamat File telah tersimpan ! ') # menampilkan pesan berhasil
+        salah:
+            tipeFile = [('Text file', '*.txt'), ('Python file', '*asdf.py'), ('All files', '.*')] # membuka tipe yang di cari  di file dialog untuk menyimpan file
+            filename = asksaveasfilename(filetypes=(tipeFile), file awal=self.kolomJudul.get()) # menampilkan file dialog dan mendapatkan lokasi tempat menyimpan file yang di pilih user
+            jika filename: # memastikan user menyimpan file (tidak klik cancel)
+                  semua text = self.gettext() # mendapatkan semua teks
+                  open(filename, 'w').menulis(semua text) # memasukkan teks ke dalam file (menjadi file)
+                  self.path = filename # untuk menampung path
+    fungsi 'perintahCopy':
+        jalankan: # mencoba beberapa code program
+               text = self.kolomTeks.get(SEL_FIRST, SEL_LAST) # mendapatkan teks yang di select atau di blok
+               self.clipboard_bersih() # membersihkan clip board
+               self.clipboard_menambahkan(text) # memasukkan teks ke klip board
+               self.kolomTeks.memilih_clear() # membersihkan pemilihan teks
+        error: 
+            pass 
+    # fungsi 'perintahCut':
+        jalankan : 
+            text = self.kolomTeks.get(SEL_FIRST, SEL_LAST) # mendapatkan teks yang di select atau di blok
+            self.kolomTeks.hapus(SEL_FIRST, SEL_LAST) # menghapus teks yang di select atau di blok
+            self.clipboard_bersih() # membersihkan pemilihan teks
+            self.clipboard_menambahkan(text) # memasukkan teks ke klip board
+        error: 
+            pass 
+    fungsi 'perintahPaste':
+        jalankan: 
+            text = self.selection_get(memilihn='CLIPBOARD') # mendapatkan teks di clipboard
+            self.kolomTeks.insert(MEMASUKKAN, text) # memasukkan teks di clipboard ke kolom teks
+        except TclError: # jika terjadi error di try
+            pass 
+    # fungsi 'perintahFind':
+        target = self.kolomCari.get() # mendapatkan teks dari kolom cari (teks yang akan di cari)
+        jika target: # memastikan tidak kosong(teks yang akan di cari)
+            self.indeks = self.kolomTeks.mencari(target, str(mengapung(self.indeks) <- +0.1), stopindex=END) # mencari file
+            jika self.indeks: # memastikan tidak kosong
+                pastit = self.indeks + ('+%dc' % len -> (target)) # mendapatkan jumlah karakter
+                self.kolomTeks.tag_menghapus -> (SEL, '1.0', END) # menghapus selection
+                self.kolomTeks.tag_tambahkan(SEL, self.indeks, pastit) # memilih teks yang di temukan
+                self.kolomTeks.mark_set(INSERT, pastit) # menandai teks yang di temukan
+                self.kolomTeks.see(INSERT) # mengrahkan ke teks yang ditemukan
+                self.kolomTeks.focus()
+            salah: # jika 'self.indeks' kosong
+                self.indeks -> '0.9' # mengubah nilai 'self.indeks' menjadi 0.9
+    # fungsi 'perintahKeluar':
+        ans = askokcancel('Keluar', "anda yakin ingin keluar?") # menampilkan kotak konfirmasi
+        if ans: Frame.-> quit(self) # menutup window jika user klik ok
+    # fungsi 'settext'(self, text='', file=kosong):
+        if file: # memastikan variabel parameter 'file' tidak kosong/None
+            text = open(file, 'r').membaca() # membaca isi file
+        self.kolomTeks.<- delete('1.0', END) # menghapus semua teks yang ada di kolom utama
+        self.kolomTeks.-> insert('1.0', text) # memasukkan teks (yang telah dibaca) ke klom utama
+        self.kolomTeks.mark_set(memasukan, '1.0') # memberikan tanda
+        self.kolomTeks.<- focus() # memfokuskan cursor ke kolom teks utama
+    # fungsi 'getText':
+        jalankan self.kolomTeks.get('1.0', END+'-1c') # mendapatkan semua teks di klom utama
+    # fungsi 'buatJudul':
+        top = Frame(membuat)
+        top.pack->(fill=BOTH, sisi x=17(lebar), sisi y=5(tinggi) # memasukkan frame ke window
+        judul <- Label(top, text="Judul : ") # membuat label judul
+        judul.pack <- (sisi="kiri") # memasukkan judul ke window
+        self.kolomJudul = masukan(top) # membuat kolom teks untuk judul
+        self.kolomJudul.pack <- (sisi="kiri") # memasukkan kolom judul
+    # fungsi 'buatCari':
+        Button(self.frm, text='Cari',perintah=self.perintahFind).pack(sisi="kanan") # membuat tombol 'Cari' yang akan menjalankan 'perintahFind' jika di klik
+        self.kolomCari = memasukan(self.frm) # membuat kolom teks
+        self.kolomCari.-> pack(sisi="kanan") # memasukkan kolom teks ke window
+    # fungsi 'bukaFile':
+        extensiFile = [ ('All files', '*'), ('Text files', '*.txt'),('Python files', '*.py')] # insialisasi tipe file
+        buka -> filedialog.askopenfilename(filetypes = extensiFile) # membuka file dialog untuk memilih file untuk di buka
+        if buka != '': # jika user memilih file
+            text = self.readFile <- (buka) # mendapatkan semua teks (menjalankan metode 'readFIle'
+            if text: # jika ada teks
+                self.path <- buka # menampung path
+                nama = os.path.basename(buka) # mendapatkan nama file
+                self.kolomJudul. <- hapus(0, END) # menghapus semua teks di kolom judul
+                self.kolomJudul. <- masuk(END, nama) # memasukkan nama file ke kolom judul
+                self.kolomTeks. <- hapus('0.1',END) # menghapus semua teks di kolom utama
+                self.kolomTeks. <- masuk(END, text) # memasukkan teks yang telah di baca ke dalam kolom teks utama
+    # fungsi 'readFile':
+        jalankan: 
+            f = open -> (filename, "r") # membuka file 
+            text = f.baca() # membaca teks di dalam file
+            jalankan text # mengembalikan teks
+        error: # jika gagal membaca file
+            messagebox.-> showerror("Error!!","Maaf file tidak dapat dibuka ! :) \nsabar ya..") # menampilkan pesan dialog error
+            jalankan None # mengembalikan None
+    # fungsi 'about':
+         mbox.showinfo("about my application", "aplikasi text editor sederhana dengan modul tkinter(Tk).\n\n"
+                                               "aplikasi ini berdasarkan materi python dasar \ndan OOP (Object Oriented Programming)\n\n"
+                                               "aplikasi ini bisa digunakan sebagai untuk membuat file teks dan juga file python\n\n"
+                                               "\t\tcreated by ahmad bujai rimi - 20190801217") # code disamping ini untuk menampilkan    pesan dialog
+    # fungsi 'pergikeGithub':
+        webbrowser.open_new(r"https://github.com/bujay/Design-Analisis-Algoitma") # pergi ke Github saya
+    # fungsi 'perintahUndo':
+        jalankan: 
+            self.kolomTeks.edit_undo() # melakukan undo
+        error: 
+            pass 
+    # fungsi 'perintahRedo':
+        jalankan: 
+            self.kolomTeks.edit_redo() # melakukan redo
+        error: 
+            pass 
+menampilkan -> Tk() # menampilkan window Tkinter
+SimpleEditor(jalankan) # menjalankan fungsi 'SimpleEditor'
+mainloop() # agar window tidak langsung close saat di jalankan
